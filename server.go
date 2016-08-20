@@ -100,7 +100,6 @@ func IfaceToConn(conn net.Conn, iface *water.Interface) {
 		client_data.DestAddr = "client"
 		client_data.Data = buffer[:n]
 
-		encoder.Encode(client_data)
 		err = encoder.Encode(client_data)
 		if err != nil {
 			log.Println("Send data to client failed:", err)
