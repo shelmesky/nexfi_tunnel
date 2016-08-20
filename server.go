@@ -87,7 +87,8 @@ func IfaceToConn(conn net.Conn, iface *water.Interface) {
 	defer wg.Done()
 	buffer := make([]byte, BUFFERSIZE)
 	for {
-		_, err := iface.Read(buffer)
+		n, err := iface.Read(buffer)
+		log.Printf("read %d bytes data from NIC\n", n)
 		if err != nil {
 			log.Println("Read from NIC failed:", err)
 			iface.Close()
@@ -97,7 +98,7 @@ func IfaceToConn(conn net.Conn, iface *water.Interface) {
 
 		client_data := new(ClientData)
 		client_data.DestAddr = "client"
-		client_data.Data = buffer
+		client_data.Data = buffer[:n]
 
 		encoder.Encode(client_data)
 		err = encoder.Encode(client_data)
@@ -107,6 +108,5 @@ func IfaceToConn(conn net.Conn, iface *water.Interface) {
 			conn.Close()
 			break
 		}
-
 	}
 }
