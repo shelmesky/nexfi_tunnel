@@ -58,8 +58,8 @@ func main() {
 
 func ConnToIface(conn net.Conn, iface *water.Interface) {
 	defer wg.Done()
+	client_data := new(ClientData)
 	for {
-		client_data := new(ClientData)
 		err := decoder.Decode(client_data)
 		if err == io.EOF {
 			log.Println("Client connection close")
